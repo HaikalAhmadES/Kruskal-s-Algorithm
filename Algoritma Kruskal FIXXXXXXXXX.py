@@ -1,20 +1,20 @@
 import turtle 
 
-class DisjointSet: #utk kelola find dan union dan tidak membntuk sirkuit
-    def __init__(self, nodes): #fungsi inisialisasi
-        self.parent = {node: node for node in nodes} #mempermudah fungsi find
-        self.rank = {node: 0 for node in nodes} #mempermudah fungsi union
+class DisjointSet:
+    def __init__(self, nodes):
+        self.parent = {node: node for node in nodes}
+        self.rank = {node: 0 for node in nodes}
 
-    def find(self, node): #cek node1 dan node2 di grup sama
+    def find(self, node):
         if self.parent[node] != node:
             self.parent[node] = self.find(self.parent[node])
         return self.parent[node]
 
-    def union(self, node1, node2): #menggabungkan node1 dan node2 (blm terhubung) > add  to MST
+    def union(self, node1, node2):
         root1 = self.find(node1)
         root2 = self.find(node2)
 
-        if root1 != root2: #menggunakan fungsi rank > rute pendek
+        if root1 != root2:
             if self.rank[root1] > self.rank[root2]:
                 self.parent[root2] = root1
             elif self.rank[root1] < self.rank[root2]:
@@ -23,40 +23,40 @@ class DisjointSet: #utk kelola find dan union dan tidak membntuk sirkuit
                 self.parent[root2] = root1
                 self.rank[root1] += 1
 
-def kruskal(graph): #utk meenemukan MST
+def kruskal(graph):
     edges = [(weight, node1, node2) for node1, node_list in graph.items() for node2, weight in node_list.items()]
-    edges.sort() #edge ke list
-    nodes = set(node for node_list in graph.values() for node in node_list) #objek disjoin frm nodes exist
+    edges.sort()
+    nodes = set(node for node_list in graph.values() for node in node_list)
     disjoint_set = DisjointSet(nodes)
     minimum_spanning_tree = []
 
     for edge in edges: #iterasi
         weight, node1, node2 = edge
-        if disjoint_set.find(node1) != disjoint_set.find(node2): #2 node blm tergabung, gabungkan > tambahkan ke MST
-            disjoint_set.union(node1, node2) #gabungkan pake union
+        if disjoint_set.find(node1) != disjoint_set.find(node2):
+            disjoint_set.union(node1, node2)
             minimum_spanning_tree.append((node1, node2, weight))
 
-    return minimum_spanning_tree #mengembalikan return MST ke dftar edge
+    return minimum_spanning_tree
 
-def draw_graph(graph, mst, positions): #tampilan awal turtle
+def draw_graph(graph, mst, positions):
     turtle.speed(0)
     turtle.hideturtle()
     turtle.title("Algoritma Kruskal - MST")
     
-    for frm, neighbors in graph.items(): #gambar edge warna abu
+    for frm, neighbors in graph.items():
         for to, weight in neighbors.items():
             if frm < to:
                 draw_edge(frm, to, weight, positions, "gray", 1)
     
-    for frm, to, weight in mst: #gambar edge mst warna merah
+    for frm, to, weight in mst:
         draw_edge(frm, to, weight, positions, "red", 3)
     
-    for node, position in positions.items(): #gambar node
+    for node, position in positions.items():
         draw_node(node, position)
     
     turtle.done()
 
-def draw_node(node, position): #gambar simpul
+def draw_node(node, position):
     x, y = position
     turtle.penup()
     turtle.goto(x, y - 20)
@@ -70,7 +70,7 @@ def draw_node(node, position): #gambar simpul
     turtle.pendown()
     turtle.write(str(node), align="center", font=("Arial", 12, "bold"))
 
-def draw_edge(frm, to, weight, positions, color, pen_size=1): #gambar edge
+def draw_edge(frm, to, weight, positions, color, pen_size=1):
     x1, y1 = positions[frm]
     x2, y2 = positions[to]
     turtle.penup()
@@ -79,7 +79,7 @@ def draw_edge(frm, to, weight, positions, color, pen_size=1): #gambar edge
     turtle.pencolor(color)
     turtle.pensize(pen_size)
     turtle.goto(x2, y2)
-    turtle.penup() #tuliskan bobot ditengah 2 edge
+    turtle.penup() 
     turtle.goto((x1 + x2) / 2, (y1 + y2) / 2)
     turtle.pendown()
     turtle.write(str(weight), align="center", font=("Arial", 12, "normal"))
