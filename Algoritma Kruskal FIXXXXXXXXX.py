@@ -163,5 +163,5 @@ def main2():
     draw_graph(graph, minimum_spanning_tree, positions)
 
 if __name__ == "__main__":
-    main1() #jika ingin menampilkan output dari studi kasus 2 (yang berada pada main2), ubah main1() pada menjadi main2()
+    main1() #jika ingin menampilkan output dari studi kasus 2 (yang berada pada main2), ubah main1() di samping menjadi main2()
     
